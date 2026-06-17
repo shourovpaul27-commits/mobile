@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Just One Moment</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: black;
+  color: white;
+}
+
+/* LOCK SCREEN */
+#lockScreen {
+  height: 100vh;
+ background: url("lock.jpg") center center/cover no-repeat;
+  background-color: black;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+#lockScreen input,
+#lockScreen button {
+  width: 80%;
+  max-width: 300px;
+  border-radius: 12px;
+}
+
+#lockScreen button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+/* SURPRISE SCREEN */
+#surpriseScreen {
+  display: none;
+  min-height: 100vh;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+    url("her.jpg") center center/cover no-repeat;
+
+  padding: 20px;
+}
+
+#message {
+  max-width: 700px;
+  margin: 0 auto;
+  padding-top: 15vh;
+
+  font-size: 22px;
+  line-height: 1.9;
+  color: #ffd6e8;
+}
+
+#message {
+  max-width: 700px;
+  margin: 0 auto;
+  padding-top: 30px;
+
+  font-size: clamp(16px, 4vw, 22px);
+  line-height: 1.8;
+
+  color: #ffd6e8;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+#message {
+  max-width: 700px;
+  margin: 0 auto;
+  padding-top: 20px;
+
+  font-size: clamp(16px, 4vw, 22px);
+  line-height: 1.8;
+
+  color: #ffd6e8;
+  text-align: left;
+  word-wrap: break-word;
+
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+
+  padding: 25px;
+  border-radius: 20px;
+}
+
+#message h1 {
+  text-align: center;
+  font-size: clamp(24px, 8vw, 40px);
+  margin-bottom: 20px;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow:
+      0 0 5px #ffd6e8,
+      0 0 10px #ffd6e8;
+  }
+
+  50% {
+    text-shadow:
+      0 0 15px #ffd6e8,
+      0 0 30px #ff9ecf,
+      0 0 45px #ff9ecf;
+  }
+
+  100% {
+    text-shadow:
+      0 0 5px #ffd6e8,
+      0 0 10px #ffd6e8;
+  }
+}
+
+#title {
+  animation: glow 2s infinite;
+}
+
+.special-text {
+  font-size: 32px;
+  color: #ffd6e8;
+  margin-bottom: 20px;
+}
+
+.heart {
+  position: fixed;
+  bottom: -50px;
+  z-index: 9999;
+  pointer-events: none;
+  animation: float 5s linear forwards;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
+}
+
+#lockScreen, #surpriseScreen {
+  transition: opacity 1s ease;
+}
+
+@media (max-width: 768px) {
+
+  #surpriseScreen {
+    padding: 15px;
+  }
+
+  #message {
+    padding: 20px;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  #message h1 {
+    font-size: 28px;
+  }
+
+  .special-text {
+    font-size: 24px;
+    padding: 0 10px;
+  }
+
+  #lockScreen input,
+  #lockScreen button {
+    width: 85%;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="lockScreen">
+  <h2 class="special-text">✨ A Little Surprise For You ✨</h2>
+
+  <input type="password" id="codeInput" placeholder="Secret code">
+  <button onclick="unlock()">Unlock</button>
+</div>
+
+<div id="surpriseScreen">
+  <div id="message">
+   <h1 id="title">𝑯𝒆𝒚 𝑻𝒉𝒆𝒓𝒆👋😊</h1>
+   <div id="text"></div>
+  </div>
+</div>   
+
+<script>
+const correctCode = "special one"; // CHANGE THIS CODE
+
+
+const romanticMessage = `You probably didn’t expect me to be here, but here I am. I wanted to try something unique for you, so I did this on my own. I want to say thank you for having me in your life for the past three years and thank you as well for the lessons that helped me a lot✨.
+You are the purest and most genuine girl I have ever seen, and I feel truly lucky to have met someone like you. The memories we created and the moments we shared will always mean a lot to me. Knowing you has shaped me in ways I will always be grateful for, and those memories will stay with me🤗.
+No matter how much time passes or where life takes us, you will always hold a special place in my heart❤︎. I will always look back on these years with appreciation, respect, and a smile. There’s nothing more to say, just wishing you happiness, success, and all the best for the future💐. I hope life gives you every good thing you deserve🙌🏻.
+
+Take care❤️
+`;
+
+function typeText(text) {
+  const box = document.getElementById("text");
+  box.innerHTML = "";
+  let i = 0;
+
+  function typing() {
+    box.innerHTML += text.charAt(i);
+
+    let delay = 40;
+
+    if (text.charAt(i) === ".") delay = 500;
+    else if (text.charAt(i) === ",") delay = 250;
+    else if (text.charAt(i) === "\n") delay = 600;
+
+    i++;
+
+    if (i < text.length) {
+      setTimeout(typing, delay);
+    }
+  }
+
+  typing();
+}
+
+function unlock() {
+  const input = document.getElementById("codeInput").value.trim();
+
+  if (input === correctCode) {
+
+    // start fade out
+    document.getElementById("lockScreen").style.opacity = "0";
+
+setTimeout(() => {
+  document.getElementById("lockScreen").style.display = "none";
+  document.getElementById("surpriseScreen").style.display = "block";
+
+const music = document.getElementById("bgMusic");
+
+music.volume = 0.3;
+
+music.play().catch(error => {
+  console.log("Audio error:", error);
+});
+
+  startHearts();
+  typeText(romanticMessage);
+}, 1000);    
+
+  } else {
+    alert("Wrong code");
+  }
+}
+
+function createHeart() {
+  const heart = document.createElement("div");
+
+  const hearts = ["❤️", "💕", "💖", "💗", "💘"];
+  heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+
+  heart.className = "heart";
+  heart.style.left = Math.random() * window.innerWidth + "px";
+  heart.style.fontSize = (20 + Math.random() * 20) + "px";
+
+  document.body.appendChild(heart);
+
+  setTimeout(() => {
+    heart.remove();
+  }, 5000);
+}
+
+let heartInterval;
+
+function startHearts() {
+  if (!heartInterval) {
+    heartInterval = setInterval(createHeart, 400);
+  }
+}
+</script>
+
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+</body>
+</html>
